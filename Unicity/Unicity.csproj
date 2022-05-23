@@ -14,6 +14,8 @@
 		<PackageProjectUrl>https://github.com/Moreault/SpriteDude</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Description>Extensions for auto-incremented IDs in non-database settings.</Description>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageIcon>unicity.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -38,6 +40,17 @@
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 			<_Parameter1>Unicity.Tests</_Parameter1>
 		</AssemblyAttribute>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\..\SmartyStrings\README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Include="..\unicity.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 </Project>
