@@ -121,4 +121,70 @@ public class EnumerableExtensionsTester
             result.Should().BeFalse();
         }
     }
+
+    [TestClass]
+    public class GetNextAvailableId_Predicate : Tester
+    {
+        [TestMethod]
+        public void WhenIdsIsNull_Throw()
+        {
+            //Arrange
+            IEnumerable<NoInterfaceDummy> source = null!;
+            var defaultValue = Fixture.Create<int>();
+
+            //Act
+            var action = () => source.GetNextAvailableNumberOrDefault(x => x.SomeNumber, defaultValue);
+
+            //Assert
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void WhenSourceEmpty_ReturnDefault()
+        {
+            //Arrange
+            var ids = Array.Empty<NoInterfaceDummy>();
+            var defaultValue = Fixture.Create<int>();
+
+            //Act
+            var result = ids.GetNextAvailableNumberOrDefault(x => x.SomeNumber, defaultValue);
+
+            //Assert
+            result.Should().Be(defaultValue);
+        }
+
+        [TestMethod]
+        public void WhenHighestValueIsTypeMaxValue_Throw()
+        {
+            //Arrange
+            var source = new List<NoInterfaceDummy>
+            {
+                Fixture.Create<NoInterfaceDummy>(),
+                new(Fixture.Create<int>(), int.MaxValue, Fixture.Create<string>()),
+                Fixture.Create<NoInterfaceDummy>(),
+                Fixture.Create<NoInterfaceDummy>(),
+            };
+            var defaultValue = Fixture.Create<int>();
+
+            //Act
+            var action = () => source.GetNextAvailableNumberOrDefault(x => x.SomeNumber, defaultValue);
+
+            //Assert
+            action.Should().Throw<Exception>().WithMessage(string.Format(Exceptions.CannotIncrementBecauseMaxValue, nameof(Int32), int.MaxValue));
+        }
+
+        [TestMethod]
+        public void WhenHighestValueIsBetweenZeroAndMaxValue_ReturnMaxValuePlusOne()
+        {
+            //Arrange
+            var ids = Fixture.CreateMany<NoInterfaceDummy>().ToList();
+            var defaultValue = Fixture.Create<int>();
+
+            //Act
+            var result = ids.GetNextAvailableNumberOrDefault(x => x.SomeNumber, defaultValue);
+
+            //Assert
+            result.Should().Be(ids.Max(x => x.SomeNumber) + 1);
+        }
+    }
 }

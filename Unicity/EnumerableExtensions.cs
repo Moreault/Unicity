@@ -2,17 +2,25 @@
 
 public static class EnumerableExtensions
 {
-    public static int GetNextAvailableId(this IEnumerable<IAutoIncrementedId<int>> ids)
+    public static int GetNextAvailableId(this IEnumerable<IAutoIncrementedId<int>> source) => source.GetNextAvailableNumberOrDefault(x => x.Id);
+
+    public static bool ContainsDuplicateIds(this IEnumerable<IAutoIncrementedId<int>> source)
     {
-        if (ids == null) throw new ArgumentNullException(nameof(ids));
-        var maxId = ids.MaxBy(x => x.Id)?.Id ?? -1;
-        if (maxId == int.MaxValue) throw new Exception(string.Format(Exceptions.CannotIncrementBecauseMaxValue, nameof(Int32), int.MaxValue));
-        return maxId + 1;
+        if (source == null) throw new ArgumentNullException(nameof(source));
+        return source.GroupBy(x => x.Id).Where(x => x.Count() > 1).Select(x => x.Key).Any();
     }
 
-    public static bool ContainsDuplicateIds(this IEnumerable<IAutoIncrementedId<int>> ids)
+    public static int GetNextAvailableNumberOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, int?> selector, int defaultValue = 0)
     {
-        if (ids == null) throw new ArgumentNullException(nameof(ids));
-        return ids.GroupBy(x => x.Id).Where(x => x.Count() > 1).Select(x => x.Key).Any();
+        if (source == null) throw new ArgumentNullException(nameof(source));
+        if (selector == null) throw new ArgumentNullException(nameof(selector));
+
+        var maxId = source.Max(selector);
+        return maxId switch
+        {
+            null => defaultValue,
+            int.MaxValue => throw new Exception(string.Format(Exceptions.CannotIncrementBecauseMaxValue, nameof(Int32), int.MaxValue)),
+            _ => maxId.Value + 1
+        };
     }
 }
