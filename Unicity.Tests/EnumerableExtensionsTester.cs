@@ -4,7 +4,7 @@ namespace Unicity.Tests;
 public class EnumerableExtensionsTester
 {
     [TestClass]
-    public class GetNextAvailableId : Tester
+    public class GetNextAvailableIdOrDefault : Tester
     {
         [TestMethod]
         public void WhenIdsIsNull_Throw()
@@ -13,7 +13,7 @@ public class EnumerableExtensionsTester
             IEnumerable<Dummy> ids = null!;
 
             //Act
-            var action = () => ids.GetNextAvailableId();
+            var action = () => ids.GetNextAvailableIdOrDefault();
 
             //Assert
             action.Should().Throw<ArgumentNullException>();
@@ -26,7 +26,7 @@ public class EnumerableExtensionsTester
             var ids = Array.Empty<Dummy>();
 
             //Act
-            var result = ids.GetNextAvailableId();
+            var result = ids.GetNextAvailableIdOrDefault();
 
             //Assert
             result.Should().Be(0);
@@ -45,7 +45,7 @@ public class EnumerableExtensionsTester
             };
 
             //Act
-            var action = () => ids.GetNextAvailableId();
+            var action = () => ids.GetNextAvailableIdOrDefault();
 
             //Assert
             action.Should().Throw<Exception>().WithMessage(string.Format(Exceptions.CannotIncrementBecauseMaxValue, nameof(Int32), int.MaxValue));
@@ -58,11 +58,13 @@ public class EnumerableExtensionsTester
             var ids = Fixture.CreateMany<Dummy>().ToList();
 
             //Act
-            var result = ids.GetNextAvailableId();
+            var result = ids.GetNextAvailableIdOrDefault();
 
             //Assert
             result.Should().Be(ids.MaxBy(x => x.Id)!.Id + 1);
         }
+
+        //TODO Test with optional defaultValue parameter
     }
 
     [TestClass]
@@ -75,7 +77,7 @@ public class EnumerableExtensionsTester
             IEnumerable<Dummy> ids = null!;
 
             //Act
-            var action = () => ids.GetNextAvailableId();
+            var action = () => ids.ContainsDuplicateIds();
 
             //Assert
             action.Should().Throw<ArgumentNullException>();
@@ -126,7 +128,7 @@ public class EnumerableExtensionsTester
     public class GetNextAvailableId_Predicate : Tester
     {
         [TestMethod]
-        public void WhenIdsIsNull_Throw()
+        public void WhenSourceIsNull_Throw()
         {
             //Arrange
             IEnumerable<NoInterfaceDummy> source = null!;
@@ -134,6 +136,20 @@ public class EnumerableExtensionsTester
 
             //Act
             var action = () => source.GetNextAvailableNumberOrDefault(x => x.SomeNumber, defaultValue);
+
+            //Assert
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void WhenSelectorIsNull_Throw()
+        {
+            //Arrange
+            var source = Fixture.CreateMany<NoInterfaceDummy>().ToList();
+            var defaultValue = Fixture.Create<int>();
+
+            //Act
+            var action = () => source.GetNextAvailableNumberOrDefault(null!, defaultValue);
 
             //Assert
             action.Should().Throw<ArgumentNullException>();

@@ -2,15 +2,18 @@
 
 public static class EnumerableExtensions
 {
-    public static int GetNextAvailableId(this IEnumerable<IAutoIncrementedId<int>> source) => source.GetNextAvailableNumberOrDefault(x => x.Id);
+    public static TNumber GetNextAvailableIdOrDefault<TNumber>(this IEnumerable<IAutoIncrementedId<TNumber>> source, TNumber defaultValue = default) where TNumber : struct, INumber<TNumber>
+    {
+        return source.GetNextAvailableNumberOrDefault(x => x.Id, defaultValue);
+    }
 
-    public static bool ContainsDuplicateIds(this IEnumerable<IAutoIncrementedId<int>> source)
+    public static bool ContainsDuplicateIds<TNumber>(this IEnumerable<IAutoIncrementedId<TNumber>> source) where TNumber : struct, INumber<TNumber>
     {
         if (source == null) throw new ArgumentNullException(nameof(source));
         return source.GroupBy(x => x.Id).Where(x => x.Count() > 1).Select(x => x.Key).Any();
     }
 
-    public static int GetNextAvailableNumberOrDefault<TSource>(this IEnumerable<TSource> source, Func<TSource, int?> selector, int defaultValue = 0)
+    public static TNumber GetNextAvailableNumberOrDefault<TSource, TNumber>(this IEnumerable<TSource> source, Func<TSource, TNumber?> selector, TNumber defaultValue) where TNumber : struct, INumber<TNumber>
     {
         if (source == null) throw new ArgumentNullException(nameof(source));
         if (selector == null) throw new ArgumentNullException(nameof(selector));
@@ -20,7 +23,7 @@ public static class EnumerableExtensions
         {
             null => defaultValue,
             int.MaxValue => throw new Exception(string.Format(Exceptions.CannotIncrementBecauseMaxValue, nameof(Int32), int.MaxValue)),
-            _ => maxId.Value + 1
+            _ => maxId.Value + TNumber.One
         };
     }
 }
