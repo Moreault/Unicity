@@ -2,7 +2,10 @@
 
 public static class EnumerableExtensions
 {
+    [Obsolete("Use GetNextAvailableIdOrDefault instead. Will be removed in 2.1.0")]
     public static int GetNextAvailableId(this IEnumerable<IAutoIncrementedId<int>> source) => source.GetNextAvailableNumberOrDefault(x => x.Id);
+
+    public static int GetNextAvailableIdOrDefault(this IEnumerable<IAutoIncrementedId<int>> source, int defaultValue = 0) => source.GetNextAvailableNumberOrDefault(x => x.Id, defaultValue);
 
     public static bool ContainsDuplicateIds(this IEnumerable<IAutoIncrementedId<int>> source)
     {
