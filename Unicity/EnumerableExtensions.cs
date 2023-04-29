@@ -13,7 +13,7 @@ public static class EnumerableExtensions
         return source.GroupBy(x => x.Id).Where(x => x.Count() > 1).Select(x => x.Key).Any();
     }
 
-    public static TNumber GetNextAvailableNumberOrDefault<TSource, TNumber>(this IEnumerable<TSource> source, Func<TSource, TNumber?> selector, TNumber defaultValue) where TNumber : struct, INumber<TNumber>, IMinMaxValue<TNumber>
+    public static TNumber GetNextAvailableNumberOrDefault<TSource, TNumber>(this IEnumerable<TSource> source, Func<TSource, TNumber?> selector, TNumber defaultValue = default) where TNumber : struct, INumber<TNumber>, IMinMaxValue<TNumber>
     {
         if (source == null) throw new ArgumentNullException(nameof(source));
         if (selector == null) throw new ArgumentNullException(nameof(selector));
