@@ -68,6 +68,6 @@ var yourOtherObject = new YourClassWithoutId
 
 ## Breaking changes
 
-2.0.X -> 2.1.0
+2.1.X -> 2.2.0 (July 2023)
 
-Method `GetNextAvailableId` is renamed to `GetNextAvailableIdOrDefault` which includes an optional `defaultValue` of `0`. Both methods are supported as of `2.0.2` to facilitate the move.
+Method `GetNextAvailableId` is renamed to `GetNextAvailableIdOrDefault` which includes an optional `defaultValue` of `0`. Both methods are supported as of `2.1.0` to facilitate the move.
