@@ -7,7 +7,7 @@ public class EnumerableExtensionsTests : Tester
     public void GetNextAvailableIdOrDefault_WhenIdsIsNull_Throw()
     {
         //Arrange
-        IEnumerable<Dummy> ids = null!;
+        IEnumerable<Garbage> ids = null!;
 
         //Act
         var action = () => ids.GetNextAvailableIdOrDefault();
@@ -20,7 +20,7 @@ public class EnumerableExtensionsTests : Tester
     public void GetNextAvailableIdOrDefault_WhenIdsEmpty_ReturnZero()
     {
         //Arrange
-        var ids = Array.Empty<Dummy>();
+        var ids = Array.Empty<Garbage>();
 
         //Act
         var result = ids.GetNextAvailableIdOrDefault();
@@ -33,12 +33,12 @@ public class EnumerableExtensionsTests : Tester
     public void GetNextAvailableIdOrDefault_WhenLastMaxIdIsMaxValue_Throw()
     {
         //Arrange
-        var ids = new List<Dummy>
+        var ids = new List<Garbage>
         {
-            Fixture.Create<Dummy>(),
-            new(int.MaxValue, Fixture.Create<string>()),
-            Fixture.Create<Dummy>(),
-            Fixture.Create<Dummy>(),
+            Dummy.Create<Garbage>(),
+            new(int.MaxValue, Dummy.Create<string>()),
+            Dummy.Create<Garbage>(),
+            Dummy.Create<Garbage>(),
         };
 
         //Act
@@ -52,7 +52,7 @@ public class EnumerableExtensionsTests : Tester
     public void GetNextAvailableIdOrDefault_WhenMaxIdIsBetweenZeroAndMaxValue_ReturnMaxIdPlusOne()
     {
         //Arrange
-        var ids = Fixture.CreateMany<Dummy>().ToList();
+        var ids = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         var result = ids.GetNextAvailableIdOrDefault();
@@ -65,7 +65,7 @@ public class EnumerableExtensionsTests : Tester
     public void ContainsDuplicateIds_WhenIdsIsNull_Throw()
     {
         //Arrange
-        IEnumerable<Dummy> ids = null!;
+        IEnumerable<Garbage> ids = null!;
 
         //Act
         var action = () => ids.ContainsDuplicateIds();
@@ -78,7 +78,7 @@ public class EnumerableExtensionsTests : Tester
     public void ContainsDuplicateIds_WhenIdsIsEmpty_ReturnFalse()
     {
         //Arrange
-        var ids = Array.Empty<Dummy>();
+        var ids = Array.Empty<Garbage>();
 
         //Act
         var result = ids.ContainsDuplicateIds();
@@ -91,8 +91,8 @@ public class EnumerableExtensionsTests : Tester
     public void ContainsDuplicateIds_WhenIdsContainsDuplicateIds_ReturnTrue()
     {
         //Arrange
-        var id = Fixture.Create<int>();
-        var ids = Fixture.Build<Dummy>().With(x => x.Id, id).CreateMany().ToList();
+        var id = Dummy.Create<int>();
+        var ids = Dummy.Build<Garbage>().With(x => x.Id, id).CreateMany().ToList();
 
         //Act
         var result = ids.ContainsDuplicateIds();
@@ -105,7 +105,7 @@ public class EnumerableExtensionsTests : Tester
     public void ContainsDuplicateIds_WhenIdsDoNotContainDuplicateIds_ReturnFalse()
     {
         //Arrange
-        var ids = Fixture.CreateMany<Dummy>().ToList();
+        var ids = Dummy.CreateMany<Garbage>().ToList();
 
         //Act
         var result = ids.ContainsDuplicateIds();
@@ -119,7 +119,7 @@ public class EnumerableExtensionsTests : Tester
     {
         //Arrange
         IEnumerable<NoInterfaceDummy> source = null!;
-        var defaultValue = Fixture.Create<int>();
+        var defaultValue = Dummy.Create<int>();
 
         //Act
         var action = () => source.GetNextAvailableNumberOrDefault(x => x.SomeNumber, defaultValue);
@@ -132,8 +132,8 @@ public class EnumerableExtensionsTests : Tester
     public void GetNextAvailableIdPredicate_WhenSelectorIsNull_Throw()
     {
         //Arrange
-        var source = Fixture.CreateMany<NoInterfaceDummy>().ToList();
-        var defaultValue = Fixture.Create<int>();
+        var source = Dummy.CreateMany<NoInterfaceDummy>().ToList();
+        var defaultValue = Dummy.Create<int>();
 
         //Act
         var action = () => source.GetNextAvailableNumberOrDefault(null!, defaultValue);
@@ -147,7 +147,7 @@ public class EnumerableExtensionsTests : Tester
     {
         //Arrange
         var ids = Array.Empty<NoInterfaceDummy>();
-        var defaultValue = Fixture.Create<int>();
+        var defaultValue = Dummy.Create<int>();
 
         //Act
         var result = ids.GetNextAvailableNumberOrDefault(x => x.SomeNumber, defaultValue);
@@ -162,12 +162,12 @@ public class EnumerableExtensionsTests : Tester
         //Arrange
         var source = new List<NoInterfaceDummy>
             {
-                Fixture.Create<NoInterfaceDummy>(),
-                new(Fixture.Create<int>(), int.MaxValue, Fixture.Create<string>()),
-                Fixture.Create<NoInterfaceDummy>(),
-                Fixture.Create<NoInterfaceDummy>(),
+                Dummy.Create<NoInterfaceDummy>(),
+                new(Dummy.Create<int>(), int.MaxValue, Dummy.Create<string>()),
+                Dummy.Create<NoInterfaceDummy>(),
+                Dummy.Create<NoInterfaceDummy>(),
             };
-        var defaultValue = Fixture.Create<int>();
+        var defaultValue = Dummy.Create<int>();
 
         //Act
         var action = () => source.GetNextAvailableNumberOrDefault(x => x.SomeNumber, defaultValue);
@@ -180,8 +180,8 @@ public class EnumerableExtensionsTests : Tester
     public void GetNextAvailableIdPredicate_WhenHighestValueIsBetweenZeroAndMaxValue_ReturnMaxValuePlusOne()
     {
         //Arrange
-        var ids = Fixture.CreateMany<NoInterfaceDummy>().ToList();
-        var defaultValue = Fixture.Create<int>();
+        var ids = Dummy.CreateMany<NoInterfaceDummy>().ToList();
+        var defaultValue = Dummy.Create<int>();
 
         //Act
         var result = ids.GetNextAvailableNumberOrDefault(x => x.SomeNumber, defaultValue);

@@ -7,14 +7,6 @@ public static class EnumerableExtensions
     /// </summary>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="NumberIncrementationException{TNumber}"/>
-    [Obsolete("Use GetNextAvailableIdOrDefault instead. Will be removed in 3.0.0")]
-    public static int GetNextAvailableId(this IEnumerable<IAutoIncrementedId<int>> source) => source.GetNextAvailableIdOrDefault();
-
-    /// <summary>
-    /// Returns the next available id for the given source.
-    /// </summary>
-    /// <exception cref="ArgumentNullException"/>
-    /// <exception cref="NumberIncrementationException{TNumber}"/>
     public static TNumber GetNextAvailableIdOrDefault<TNumber>(this IEnumerable<IAutoIncrementedId<TNumber>> source, TNumber defaultValue = default) where TNumber : struct, INumber<TNumber>, IMinMaxValue<TNumber>
     {
         return source.GetNextAvailableNumberOrDefault(x => x.Id, defaultValue);
