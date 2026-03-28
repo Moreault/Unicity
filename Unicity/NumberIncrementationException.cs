@@ -1,8 +1,9 @@
-﻿namespace ToolBX.Unicity;
+namespace ToolBX.Unicity;
 
-public sealed class NumberIncrementationException<TNumber> : Exception where TNumber : struct, INumber<TNumber>, IMinMaxValue<TNumber>
+public sealed class NumberIncrementationException : Exception
 {
-    public NumberIncrementationException() : base(string.Format(Exceptions.CannotIncrementBecauseMaxValue, typeof(TNumber).Name, TNumber.MaxValue))
+    public NumberIncrementationException(string typeName, object maxValue)
+        : base(string.Format(ExceptionMessages.CannotIncrementBecauseMaxValue, typeName, maxValue))
     {
     }
 }

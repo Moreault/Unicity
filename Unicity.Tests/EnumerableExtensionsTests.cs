@@ -45,7 +45,7 @@ public class EnumerableExtensionsTests : Tester
         var action = () => ids.GetNextAvailableIdOrDefault();
 
         //Assert
-        action.Should().Throw<Exception>().WithMessage(string.Format(Exceptions.CannotIncrementBecauseMaxValue, nameof(Int32), int.MaxValue));
+        action.Should().Throw<NumberIncrementationException>().WithMessage(string.Format(ExceptionMessages.CannotIncrementBecauseMaxValue, nameof(Int32), int.MaxValue));
     }
 
     [TestMethod]
@@ -173,7 +173,7 @@ public class EnumerableExtensionsTests : Tester
         var action = () => source.GetNextAvailableNumberOrDefault(x => x.SomeNumber, defaultValue);
 
         //Assert
-        action.Should().ThrowExactly<NumberIncrementationException<int>>().WithMessage(string.Format(Exceptions.CannotIncrementBecauseMaxValue, nameof(Int32), int.MaxValue));
+        action.Should().Throw<NumberIncrementationException>().WithMessage(string.Format(ExceptionMessages.CannotIncrementBecauseMaxValue, nameof(Int32), int.MaxValue));
     }
 
     [TestMethod]
