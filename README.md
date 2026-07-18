@@ -40,7 +40,7 @@ var yourObject = new YourClass
 
 ### Without `IAutoIncrementedId<T>`
 
-Maybe you don't have control over `YourClass` or maybe you don't want to use the `IAutoIncrementedId<int>` interface. You can use the `GetNextAvailableIdOrDefault` method for those casse.
+Maybe you don't have control over `YourClass` or maybe you don't want to use the `IAutoIncrementedId<int>` interface. You can use the `GetNextAvailableNumberOrDefault` method for those cases.
 
 ```c#
 public record YourClass
@@ -67,6 +67,13 @@ var yourOtherObject = new YourClassWithoutId
 ```
 
 ## Breaking changes
+
+3.X.X -> 4.0.0 (March 2026)
+
+- Target framework changed from .NET 8 to .NET 10
+- `NumberIncrementationException<TNumber>` is now non-generic `NumberIncrementationException`
+- French localization for the exception message has been removed
+- The library is now AOT-compatible and trimmable
 
 2.1.X -> 2.2.0 (July 2023)
 
